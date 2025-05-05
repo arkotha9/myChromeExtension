@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "Summon Summary",
+    "version": "1.0",
+    "description": "A Chrome extension to summarize the web page I am on",
+    "permissions": [
+        "activeTab",
+        "storage", 
+        "scripting"
+    ],
+    "action": {
+        "default_popup": "index.html"
+    },
+    
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["js/content.js"] 
+        }
+    ]
+}
