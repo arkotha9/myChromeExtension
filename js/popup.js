@@ -1,54 +1,49 @@
 //Waits until all DOM elements (like your button) are available.Only then attaches your event handler
-//Ensure Your extension popup opens and responds correctly to clicks after DOM loaded
+// Wait for the popup's DOM to be fully loaded
 
 document.addEventListener('DOMContentLoaded', function() {
     const summarizeBtn = document.getElementById('summarize');
     const summaryDiv = document.getElementById('summary');
 
+    // Add click handler for the summarize button
     summarizeBtn.addEventListener('click', async function() {
         summaryDiv.textContent = 'Summarizing...';
-        
+
+        try {
+            //1.get current active tab in current window
+            const [tab] = await chrome.tabs.query({ active:true, currentWindow:true});
+
+           //get content from content script
+           chrome.tabs.sendMessage(
+            tab.id, 
+            { action: "getPageContent" }, 
+            async(response) => {
+                //3. Call Perplexity API
+                try{
+                    console.log('Response received from window:', response);
+                    if(response && response.content){
+                        //4. Get summary from API
+                        const summary = await getSummaryFromAPI(response.content);
+                        summaryDiv.textContent = summary;
+                    }
+                    else{
+                        summaryDiv.textContent = 'No content received from the page';
+                    }                    
+                }
+                catch(error){
+                    console.error('Error in receiving response from window:', chrome.runtime.lastError);
+                    summaryDiv.textContent = 'Error in receiving response from window: ' + chrome.runtime.lastError.message;
+                    return;
+                }
+            }
+        );
+        } catch (error) {
+            console.error('Error:', error);
+            summaryDiv.textContent = 'Error: ' + error.message;
+        }
     });
 });
-    
-// document.addEventListener('DOMContentLoaded', function() {
-//     const summarizeBtn = document.getElementById('summarize');
-//     const summaryDiv = document.getElementById('summary');
 
-//     summarizeBtn.addEventListener('click', async () => {
-//         summaryDiv.textContent = 'Summarizing...';
-        
-//         try {
-//             // Get active tab
-//             const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-            
-//             // Execute content script to get page content
-//             const result = await chrome.scripting.executeScript({
-//                 target: { tabId: tab.id },
-//                 function: getPageContent
-//             });
-            
-//             const pageContent = result[0].result;
-            
-//             // Here you would typically call your API to get the summary
-//             // For now, we'll just use a mock response
-//             const summary = await getSummaryFromAPI(pageContent);
-            
-//             summaryDiv.textContent = summary;
-//         } catch (error) {
-//             console.error('Error:', error);
-//             summaryDiv.textContent = 'Error generating summary. Please try again.';
-//         }
-//     });
-// });
-
-// Function to be executed in the context of the web page
-function getPageContent() {
-    // Get the main content of the page
-    // This is a simple implementation - you might want to make it more sophisticated
-    const content = document.body.innerText;
-    return content.substring(0, 5000); // Limit content length
-}
 
 // Mock API call - replace with actual API call
 async function getSummaryFromAPI(content) {

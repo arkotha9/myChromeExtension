@@ -10,7 +10,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const pageContent = extractPageContent();
         sendResponse({ content: pageContent });
     }
-    return true; // Required for async response
+    return true; // For future compatibility - Required for async response - chrome extensions
 });
 
 
