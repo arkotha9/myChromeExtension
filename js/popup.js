@@ -30,9 +30,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     }                    
                 }
                 catch(error){
-                    console.error('Error in receiving response from window:', chrome.runtime.lastError);
-                    summaryDiv.textContent = 'Error in receiving response from window: ' + chrome.runtime.lastError.message;
-                    return;
+                    console.error('Error in receiving response from window:', error);
+                    summaryDiv.textContent = 'Error in receiving response from window: ' + error.message;
+                
                 }
             }
         );
@@ -48,6 +48,7 @@ async function getSummaryFromAPI(contentInJson) {
     // This is a placeholder for your actual API call
     // You would typically make a fetch request to your backend here
     const apiKey = "AIzaSyAtZ7F6zfr0GIG4QRr-9LpdnXxFpOU8Y8s";
+    //ref: https://ai.google.dev/api/generate-content#v1beta.models.generateContent
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
     const prompt = `Summarize the content: ${contentInJson.content}`;
 
@@ -58,7 +59,11 @@ async function getSummaryFromAPI(contentInJson) {
                 'Content-Type': 'application/json'            
             },
             body: JSON.stringify({
-                "prompt": prompt
+                "contents": [ {
+                    "parts": [ {
+                        "text": prompt
+                    } ]
+                } ]
             })
         })
         
@@ -68,7 +73,9 @@ async function getSummaryFromAPI(contentInJson) {
         }
 
         const data = await response.json();
-        return data.choices.length > 0 ? data.choices[0].text: 'Failed to deserialize response from Gemini';
+        console.log('Response received from Gemini:', data);
+        //optional chaining with ?. to handle null or undefined
+        return data.candidates.length > 0 ? data.candidates?.[0]?.content?.parts?.[0]?.text: 'Failed to deserialize response from Gemini';
     }
     catch(error){
         console.error('Error in getting summary from Gemini', error);

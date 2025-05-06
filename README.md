@@ -77,3 +77,33 @@ When you mark a function as async, that function always returns a promise, regar
 
 
 Fetch api content type is json bu u have to send body as a string
+
+Google API ref for POST: https://ai.google.dev/api/generate-content
+
+Request Body:
+{
+  "contents": [
+    {
+      "parts": [
+        {
+          "text": "your prompt here"
+        }
+      ]
+    }
+  ]
+}
+
+Response Body:
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "your response here"
+          }
+        ]
+      }
+    }
+  ]
+}
