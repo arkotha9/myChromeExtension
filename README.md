@@ -74,3 +74,6 @@ When a Promise object is resolved, it returns the value that was passed to it wh
 
 The Key Idea: async Functions and Promises
 When you mark a function as async, that function always returns a promise, regardless of what you return from it. Even if you return a simple value, like a string or an object, JavaScript automatically wraps it in a promise
+
+
+Fetch api content type is json bu u have to send body as a string
