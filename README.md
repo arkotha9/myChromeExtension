@@ -68,3 +68,9 @@ response.json() starts reading that stream and deserializing it into a JS object
 But that takes time, so it returns a Promise that eventually resolves to the actual object.
 
 If you don’t await it, you just get the Promise — not the data.
+
+When a Promise object is resolved, it returns the value that was passed to it when it was resolved. This value can be anything: a simple value (like a number or string), an object, or even another promise.
+
+
+The Key Idea: async Functions and Promises
+When you mark a function as async, that function always returns a promise, regardless of what you return from it. Even if you return a simple value, like a string or an object, JavaScript automatically wraps it in a promise
