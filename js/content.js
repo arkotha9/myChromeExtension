@@ -3,14 +3,14 @@
 
 // Listen for messages from the popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log("Content.js just received " + request);
-    console.log("My sender object is " + sender);
+    console.log("Content.js just received the request for " + request.action);
+    console.log("My request sender object is " + sender);
     
     if (request.action === 'getPageContent') {
         const pageContent = extractPageContent();
         sendResponse({ content: pageContent });
     }
-    return true; // For future compatibility - Required for async response - chrome extensions
+    return true; // If above fn was async, then ushouldnt close off the port - Required for async response - chrome extensions
 });
 
 
