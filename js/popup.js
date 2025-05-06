@@ -57,6 +57,7 @@ async function getSummaryFromAPI(content) {
             throw new Error('Failed to fetch pokemon data from pokemon API');
         }
         const data = await response.json();
+        console.log('Data received from pokemon API:', data);
         return data;
     }
     catch(error){
