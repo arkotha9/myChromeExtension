@@ -39,18 +39,23 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Error:', error);
             summaryDiv.textContent = 'Error: ' + error.message;
+            return `Error: ${error.message}`;
         }
     });
 });
 
 
 async function getSummaryFromAPI(contentInJson) {
-    // This is a placeholder for your actual API call
     // You would typically make a fetch request to your backend here
     const apiKey = "AIzaSyAtZ7F6zfr0GIG4QRr-9LpdnXxFpOU8Y8s";
+
     //ref: https://ai.google.dev/api/generate-content#v1beta.models.generateContent
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-    const prompt = `Summarize the content: ${contentInJson.content}`;
+    
+    //Prompts
+    // const prompt = `Summarize the content: ${contentInJson.content}`;
+    const chessPrompt = `You are a chess grandmaster. Given the following chess game moves so far:\n${contentInJson.content}\n.Suggest my next best move to win the game. Respond with the move in standard pgn notation only.`;
+
 
     try{
         const response = await fetch(url, {
@@ -61,7 +66,7 @@ async function getSummaryFromAPI(contentInJson) {
             body: JSON.stringify({
                 "contents": [ {
                     "parts": [ {
-                        "text": prompt
+                        "text": chessPrompt
                     } ]
                 } ]
             })
@@ -74,11 +79,13 @@ async function getSummaryFromAPI(contentInJson) {
 
         const data = await response.json();
         console.log('Response received from Gemini:', data);
+        
         //optional chaining with ?. to handle null or undefined
         return data.candidates.length > 0 ? data.candidates?.[0]?.content?.parts?.[0]?.text: 'Failed to deserialize response from Gemini';
+
     }
     catch(error){
         console.error('Error in getting summary from Gemini', error);
-        throw error;
+        return `Error in getting summary from Gemini: ${error.message}`;
     }
 }
