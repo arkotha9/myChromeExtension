@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add click handler for the summarize button
     summarizeBtn.addEventListener('click', async function() {
-        summaryDiv.textContent = 'Summarizing...';
+        summaryDiv.textContent = 'Thinking...';
 
         try {
             //1.get current active tab in current window
@@ -54,7 +54,7 @@ async function getSummaryFromAPI(contentInJson) {
     
     //Prompts
     // const prompt = `Summarize the content: ${contentInJson.content}`;
-    const chessPrompt = `You are a chess grandmaster. Given the following chess game moves so far:\n${contentInJson.content}\n.Suggest my next best move to win the game. Respond with the move in standard pgn notation only.`;
+    const chessPrompt = `You are a chess grandmaster. Given the following chess game moves so far:\n${contentInJson.content}\n.Suggest my next best move to win the game. Respond with the move in user friendly explanation and standard pgn.`;
 
 
     try{
