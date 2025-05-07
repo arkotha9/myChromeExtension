@@ -54,8 +54,30 @@ async function getSummaryFromAPI(contentInJson) {
     
     //Prompts
     // const prompt = `Summarize the content: ${contentInJson.content}`;
-    const chessPrompt = `You are a chess grandmaster. Here are the moves played so far in the game:\n${contentInJson.content}\nPlease suggest the best next move I should make to win. Respond in a simple format like "Move your knight to f3" or "Move your queen to d4"`;
 
+    const chessPrompt = `I am playing as White in this chess game. The moves made so far are in PGN format: ${contentInJson.content}
+
+                        Each numbered entry represents a turn:
+                        - The **first move** (e.g., "e4") is mine (White),
+                        - The **second move** (e.g., "e5") is my opponent's (Black).
+                        
+                        If there are no moves yet, suggest a strong opening move for White.
+                        
+                        Your response must follow these rules:
+                        1. Do NOT use chess abbreviations like K, Q, N, etc. State the piece
+                        2. Use only square names like "e4", "g5", etc.
+                        3. Say clearly which of **my pieces (White)** to move, and to where.
+                        4. ONLY suggest a move for me — not for my opponent.
+                        5. Respond in this format:
+                           - "Move your [piece] from [square] to [square]."
+                        
+                        Examples:
+                        - "Move your pawn from e2 to e4."
+                        - "Move your bishop to g5."
+                        - "Move your rook from a1 to d1."
+                        
+                        Keep it concise and do not describe my opponent's pieces.`;
+                        
     try{
         const response = await fetch(url, {
             method: 'POST',
