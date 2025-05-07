@@ -54,8 +54,7 @@ async function getSummaryFromAPI(contentInJson) {
     
     //Prompts
     // const prompt = `Summarize the content: ${contentInJson.content}`;
-    const chessPrompt = `You are a chess grandmaster. Given the following chess game moves so far:\n${contentInJson.content}\n.Suggest my next best move to win the game. Respond with the move in user friendly explanation and standard pgn.`;
-
+    const chessPrompt = `You are a chess grandmaster. Here are the moves played so far in the game:\n${contentInJson.content}\nPlease suggest the best next move I should make to win. Respond in a simple format like "Move your knight to f3" or "Move your queen to d4"`;
 
     try{
         const response = await fetch(url, {
