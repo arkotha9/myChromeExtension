@@ -4,26 +4,48 @@
 // Listen for messages from the popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log("Content.js just received the request for " + request.action);
-    console.log("My request sender object is " + sender);
+    console.log("My request sender object is ", sender);
     
     if (request.action === 'getPageContent') {
         const pageContent = extractPageContent();
         sendResponse({ content: pageContent });
     }
-    return true; // If above fn was async, then ushouldnt close off the port - Required for async response - chrome extensions
+    return true; // If above fn was async, then u shouldnt close off the port - Required for async response - chrome extensions
 });
 
 
 function extractPageContent(){
-    const neededContent = document.querySelector('main, article, .main-content, .main-article, .blog-post, .text-body, [role="main"], [role="document"]') || document.body;
-    
-    const content = neededContent.innerText.replace(/[\t\n\s]+/g,' ').trim();
+    try{
+        const gameMovesSpans = document.querySelectorAll('#scroll-container .main-line-row span.node-highlight-content');
+        // returns empty node list of spans or non emtpy list of spans
+        if(gameMovesSpans.length === 0){
+            throw new Error('No span elements found');
+        }
+        console.log("Found " + gameMovesSpans.length + " span elements");
 
-    const maxLengthofContent = 10000;
-    if (content.length > maxLengthofContent){
-        content = content.substring(0, maxLengthofContent) + '...';
+        const moves = [];
+        gameMovesSpans.forEach(span => {
+            const move = span.textContent.trim();
+            if(move){
+                moves.push(move)
+            }
+            
+        })
+        moves.forEach(move => {
+            console.log(move + " ");
+        })
+        console.log("Finished printing moves\n");
+
+        const pgnString = moves.map((move, index) => {
+            const moveNumber = Math.floor(index / 2) + 1;
+            return index % 2 === 0 ? `${moveNumber}. ${move}` : move;
+        }).join(' ');
+        
+        console.log("PGN String generated: " + pgnString);
+        return pgnString;
     }
-
-    return content;
-
+    catch(error){
+        console.error('Error in extracting span elements to create the PGN string: ', error.message);
+        return `Error in extracting span elements to create the PGN string: ${error.message}`;
+    }
 }
