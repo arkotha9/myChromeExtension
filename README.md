@@ -107,3 +107,19 @@ Response Body:
     }
   ]
 }
+------------------------------------------------------------------------------------
+
+// textContent: "\n  Hello\n  World\n  p { color: red; }\n"
+console.log(document.getElementById('example').textContent);
+
+// innerText: "" (empty string because parent is hidden)
+console.log(document.getElementById('example').innerText);
+
+Block Scope: Each iteration of forEach creates a new block scope. The const move is created fresh in each iteration.
+So we na use const move and const moves = [] bcoz array reference is not changing
+
+
+--------------------------
+permissions = “What am I allowed to do?”
+
+host_permissions = “Where am I allowed to do it?”
