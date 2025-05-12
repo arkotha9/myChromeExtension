@@ -18,10 +18,12 @@ function extractPageContent(){
     try{
         const gameMovesSpans = document.querySelectorAll('#scroll-container .main-line-row span.node-highlight-content');
         // returns empty node list of spans or non emtpy list of spans
-        if(gameMovesSpans.length === 0){
-            throw new Error('No span elements found');
-        }
         console.log("Found " + gameMovesSpans.length + " span elements");
+        if(gameMovesSpans.length === 0){
+            //throw new Error('No span elements found');
+            return "";
+        }
+        
 
         const moves = [];
         gameMovesSpans.forEach(span => {

@@ -67,7 +67,7 @@ Each numbered entry represents a turn:
 - The **first move** (e.g., "e4") is mine (White),
 - The **second move** (e.g., "e5") is my opponent's (Black).
 
-If there are no moves yet, suggest a strong opening move for White.
+If there are no moves yet (empty PGN), this is a fresh game - suggest a strong opening move for White.
 
 Your response must follow these rules:
 1. Do NOT use chess abbreviations like K, Q, N, etc. State the piece
@@ -76,12 +76,10 @@ Your response must follow these rules:
 4. ONLY suggest a move for me — not for my opponent.
 5. Respond in this format:
    - "Move your [piece] from [square] to [square]."
-6. Verify the move is legal in the current position before suggesting it.
 
 Examples:
 - "Move your pawn from e2 to e4."
 - "Move your bishop to g5."
-- "Move your rook from a1 to d1."
 Keep it concise.`;
                         
     try{
