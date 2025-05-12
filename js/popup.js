@@ -60,31 +60,25 @@ async function getSummaryFromAPI(contentInJson) {
     //ref: https://ai.google.dev/api/generate-content#v1beta.models.generateContent
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${CONFIG.API_KEY}`;
     
+    // Get all legal moves
+    const legalMoves = chess.moves({verbose: true});
+    console.log('Legal moves:', legalMoves);
+
     const chessPrompt = `I am playing as White in this chess game. 
 Current board state (FEN): ${fenString}
 Move history (PGN): ${contentInJson.content}
 
-IMPORTANT: The FEN string above shows the EXACT current position of all pieces. Use this to determine which pieces are available to move.
+Here are all the legal moves available for White:
+${legalMoves.map(move => `- ${move.piece} from ${move.from} to ${move.to}`).join('\n')}
 
-Each numbered entry represents a turn:
-- The **first move** (e.g., "e4") is mine (White),
-- The **second move** (e.g., "e5") is my opponent's (Black).
+Please choose one of these exact moves and respond in this format:
+"Move your [piece] from [square] to [square]"
 
-If there are no moves yet (empty PGN), this is a fresh game - suggest a strong opening move for White.
+Example responses:
+- "Move your pawn from e2 to e4"
+- "Move your knight from g1 to f3"
 
-Your response must follow these rules:
-1. Do NOT use chess abbreviations like K, Q, N, etc. State the piece
-2. Use only square names like "e4", "g5", etc.
-3. Say clearly which of **my pieces (White)** to move, and to where.
-4. ONLY suggest a move for me — not for my opponent.
-5. Respond in this format:
-   - "Move your [piece] from [square] to [square]."
-6. IMPORTANT: Only suggest moves for pieces that exist in the current position (check the FEN string above)
-
-Examples:
-- "Move your pawn from e2 to e4."
-- "Move your bishop to g5."
-Keep it concise.`;
+Keep it concise and only choose from the moves listed above.`;
                         
     try{
         const response = await fetch(url, {
