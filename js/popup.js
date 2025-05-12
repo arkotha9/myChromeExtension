@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
 async function getSummaryFromAPI(contentInJson) {
     // Create a Chess object and obtain the FEN notation
     const chess = new Chess();
-    if(!chess.loadPgn(contentInJson.content)){
-        throw new Error('Failed to parse PGN content in loadPgn function. Check the PGN format.');
+    if(!chess.load_pgn(contentInJson.content)){
+        throw new Error('Failed to parse PGN content in load_pgn function. Check the PGN format.');
     }
     const fenString = chess.fen();
     console.log('FEN string:', fenString);
