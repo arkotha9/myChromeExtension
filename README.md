@@ -162,3 +162,6 @@ Chess.js is not present as an ES module so cant import or export it. So added it
 Reger in JS 
 const regex = /pattern/flags;
 like in ches moves: regex = /from\s+[a-h][1-8]\s+to\s+[a-h][1-8]\s+/i
+
+
+### I realized that just LLM and chess.js will not ive winning moves. I need to use a chess engine which suggests the best move.
