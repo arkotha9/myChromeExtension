@@ -60,8 +60,11 @@ async function getSummaryFromAPI(contentInJson) {
     //ref: https://ai.google.dev/api/generate-content#v1beta.models.generateContent
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${CONFIG.API_KEY}`;
     
-    const chessPrompt = `I am playing as White in this chess game. Current board state (FEN): ${fenString}.
-    Move history (PGN): ${contentInJson.content}
+    const chessPrompt = `I am playing as White in this chess game. 
+Current board state (FEN): ${fenString}
+Move history (PGN): ${contentInJson.content}
+
+IMPORTANT: The FEN string above shows the EXACT current position of all pieces. Use this to determine which pieces are available to move.
 
 Each numbered entry represents a turn:
 - The **first move** (e.g., "e4") is mine (White),
@@ -76,6 +79,7 @@ Your response must follow these rules:
 4. ONLY suggest a move for me — not for my opponent.
 5. Respond in this format:
    - "Move your [piece] from [square] to [square]."
+6. IMPORTANT: Only suggest moves for pieces that exist in the current position (check the FEN string above)
 
 Examples:
 - "Move your pawn from e2 to e4."
@@ -120,11 +124,15 @@ Keep it concise.`;
 
         const fromSquare = moveMatch[1];
         const toSquare = moveMatch[2];
+        console.log('Attempting move from', fromSquare, 'to', toSquare);
+        
         const move = chess.move({ from: fromSquare, to: toSquare });
 
         if (!move) {
+            console.log('Invalid move. Available moves:', chess.moves({verbose: true}));
             throw new Error('Invalid move suggested by LLM. Retry');
         }
+        console.log("Move validated!!");
 
         // If we get here, the move is valid
         return llmResponse;
