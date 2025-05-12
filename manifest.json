@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Summon Summary",
-    "version": "1.0",
+    "version": "2.0",
     "description": "A Chrome extension to summarize the web page I am on",
     "permissions": [
         "activeTab",
@@ -9,14 +9,20 @@
         "scripting",
         "tabs"
     ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
     "action": {
         "default_popup": "index.html"
     },
-    
+    "web_accessible_resources": [{
+        "resources": ["js/config.js", "js/chess.js"],
+        "matches": ["<all_urls>"]
+    }],
     "content_scripts": [
         {
             "matches": ["<all_urls>"],
-            "js": ["js/content.js"] 
+            "js": ["js/chess.js", "js/content.js"] 
         }
     ]
 }

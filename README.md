@@ -107,3 +107,61 @@ Response Body:
     }
   ]
 }
+------------------------------------------------------------------------------------
+
+// textContent: "\n  Hello\n  World\n  p { color: red; }\n"
+console.log(document.getElementById('example').textContent);
+
+// innerText: "" (empty string because parent is hidden)
+console.log(document.getElementById('example').innerText);
+
+Block Scope: Each iteration of forEach creates a new block scope. The const move is created fresh in each iteration.
+So we na use const move and const moves = [] bcoz array reference is not changing
+
+
+--------------------------
+permissions = “What am I allowed to do?”
+
+host_permissions = “Where am I allowed to do it?”
+
+------------------------------------------------------------------
+1.In modern JavaScript, to share variables/functions between files, we need to explicitly export them using the export keyword. Without export, the CONFIG object would only be available within config.js and couldn't be accessed by other files
+
+2. Chrome extensions have strict security policies. 
+By default, extension files can't be accessed by other parts of the extension
+This manifest entry explicitly tells Chrome that config.js should be accessible to other parts of the extension
+Without this, the import statement in popup.js would fail because Chrome would block access to config.js
+
+3. Regular scripts can't use import/export statements - they must be modules. So in html file, we load popup.js as module so that it can use the import statement.
+
+Key features of modules:
+Each module has its own scope (variables/functions aren't automatically global)
+You must explicitly export what you want to share
+You must explicitly import what you want to use
+They use import and export statements
+They must be loaded with type="module" in HTML
+
+Wihtout modules, we would have had to do this:
+window.CONFIG = { API_KEY: "..." };  // Global variable
+
+// popup.js
+const apiKey = window.CONFIG.API_KEY;  // Accessing global variable
+
+---------
+
+Summary:
+Use content scripts when your code needs to interact with the webpage DOM directly.
+
+Use web accessible resources when you need to load files from your extension into the webpage’s JS scope (e.g., loading chess.js directly on the page).
+
+--Design Choices:
+Chess.js is not present as an ES module so cant import or export it. So added it as a script to load before popup.js so that it is avaialbale via the global window object
+
+
+-------------------
+Reger in JS 
+const regex = /pattern/flags;
+like in ches moves: regex = /from\s+[a-h][1-8]\s+to\s+[a-h][1-8]\s+/i
+
+
+### I realized that just LLM and chess.js will not ive winning moves. I need to use a chess engine which suggests the best move.
