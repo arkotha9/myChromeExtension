@@ -47,10 +47,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function getSummaryFromAPI(contentInJson) {
     // You would typically make a fetch request to your backend here
-    const apiKey = "AIzaSyAtZ7F6zfr0GIG4QRr-9LpdnXxFpOU8Y8s";
-
     //ref: https://ai.google.dev/api/generate-content#v1beta.models.generateContent
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${CONFIG.API_KEY}`;
     
     //Prompts
     // const prompt = `Summarize the content: ${contentInJson.content}`;
