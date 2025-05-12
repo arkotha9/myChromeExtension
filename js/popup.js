@@ -113,7 +113,7 @@ Keep it concise.`;
 
         // Extract the move from LLM response
         // Example: "Move your pawn from e2 to e4" -> "e2e4"
-        const moveMatch = llmResponse.match(/from\s+([a-h][1-8])\s+to\s+([a-h][1-8])\s+/i);
+        const moveMatch = llmResponse.match(/from\s+([a-h][1-8])\s+to\s+([a-h][1-8])*[\s\n]*/i);
         if (!moveMatch) {
             throw new Error('Could not parse move from LLM response');
         }
