@@ -156,3 +156,9 @@ Use web accessible resources when you need to load files from your extension int
 
 --Design Choices:
 Chess.js is not present as an ES module so cant import or export it. So added it as a script to load before popup.js so that it is avaialbale via the global window object
+
+
+-------------------
+Reger in JS 
+const regex = /pattern/flags;
+like in ches moves: regex = /from\s+[a-h][1-8]\s+to\s+[a-h][1-8]\s+/i

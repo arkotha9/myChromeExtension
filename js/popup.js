@@ -105,8 +105,29 @@ Keep it concise.`;
         const data = await response.json();
         console.log('Response received from Gemini:', data);
         
-        //optional chaining with ?. to handle null or undefined
-        return data.candidates.length > 0 ? data.candidates?.[0]?.content?.parts?.[0]?.text: 'Failed to deserialize response from Gemini';
+        // Get the move suggestion from LLM
+        const llmResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!llmResponse) {
+            return 'Failed to deserialize response from Gemini';
+        }
+
+        // Extract the move from LLM response
+        // Example: "Move your pawn from e2 to e4" -> "e2e4"
+        const moveMatch = llmResponse.match(/from\s+([a-h][1-8])\s+to\s+([a-h][1-8])\s+/i);
+        if (!moveMatch) {
+            throw new Error('Could not parse move from LLM response');
+        }
+
+        const fromSquare = moveMatch[1];
+        const toSquare = moveMatch[2];
+        const move = chess.move({ from: fromSquare, to: toSquare });
+
+        if (!move) {
+            throw new Error('Invalid move suggested by LLM. Retry');
+        }
+
+        // If we get here, the move is valid
+        return llmResponse;
 
     }
     catch(error){
