@@ -123,3 +123,26 @@ So we na use const move and const moves = [] bcoz array reference is not changin
 permissions = “What am I allowed to do?”
 
 host_permissions = “Where am I allowed to do it?”
+
+------------------------------------------------------------------
+1.In modern JavaScript, to share variables/functions between files, we need to explicitly export them using the export keyword. Without export, the CONFIG object would only be available within config.js and couldn't be accessed by other files
+
+2. Chrome extensions have strict security policies. 
+By default, extension files can't be accessed by other parts of the extension
+This manifest entry explicitly tells Chrome that config.js should be accessible to other parts of the extension
+Without this, the import statement in popup.js would fail because Chrome would block access to config.js
+
+3. Regular scripts can't use import/export statements - they must be modules. So in html file, we load popup.js as module so that it can use the import statement.
+
+Key features of modules:
+Each module has its own scope (variables/functions aren't automatically global)
+You must explicitly export what you want to share
+You must explicitly import what you want to use
+They use import and export statements
+They must be loaded with type="module" in HTML
+
+Wihtout modules, we would have had to do this:
+window.CONFIG = { API_KEY: "..." };  // Global variable
+
+// popup.js
+const apiKey = window.CONFIG.API_KEY;  // Accessing global variable

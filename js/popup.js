@@ -1,3 +1,6 @@
+// Import config
+import { CONFIG } from './config.js';
+
 //Waits until all DOM elements (like your button) are available.Only then attaches your event handler
 // Wait for the popup's DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -32,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 catch(error){
                     console.error('Error in receiving response from window:', error);
                     summaryDiv.textContent = 'Error in receiving response from window: ' + error.message;
-                
                 }
             }
         );
