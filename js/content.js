@@ -31,10 +31,10 @@ function extractPageContent(){
             }
             
         })
-        moves.forEach(move => {
-            console.log(move + " ");
-        })
-        console.log("Finished printing moves\n");
+        // moves.forEach(move => {
+        //     console.log(move + " ");
+        // })
+        // console.log("Finished printing moves\n");
 
         const pgnString = moves.map((move, index) => {
             const moveNumber = Math.floor(index / 2) + 1;
