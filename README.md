@@ -146,3 +146,13 @@ window.CONFIG = { API_KEY: "..." };  // Global variable
 
 // popup.js
 const apiKey = window.CONFIG.API_KEY;  // Accessing global variable
+
+---------
+
+Summary:
+Use content scripts when your code needs to interact with the webpage DOM directly.
+
+Use web accessible resources when you need to load files from your extension into the webpage’s JS scope (e.g., loading chess.js directly on the page).
+
+--Design Choices:
+Chess.js is not present as an ES module so cant import or export it. So added it as a script to load before popup.js so that it is avaialbale via the global window object

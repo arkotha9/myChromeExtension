@@ -16,13 +16,13 @@
         "default_popup": "index.html"
     },
     "web_accessible_resources": [{
-        "resources": ["js/config.js"],
+        "resources": ["js/config.js", "js/chess.js"],
         "matches": ["<all_urls>"]
     }],
     "content_scripts": [
         {
             "matches": ["<all_urls>"],
-            "js": ["js/content.js"] 
+            "js": ["js/chess.js", "js/content.js"] 
         }
     ]
 }

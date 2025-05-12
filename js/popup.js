@@ -48,35 +48,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 async function getSummaryFromAPI(contentInJson) {
-    // You would typically make a fetch request to your backend here
+    // Create a Chess object and obtain the FEN notation
+    const chess = new Chess();
+    if(!chess.loadPgn(contentInJson.content)){
+        throw new Error('Failed to parse PGN content in loadPgn function. Check the PGN format.');
+    }
+    const fenString = chess.fen();
+    console.log('FEN string:', fenString);
+
+    // API call to Gemini
     //ref: https://ai.google.dev/api/generate-content#v1beta.models.generateContent
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${CONFIG.API_KEY}`;
     
-    //Prompts
-    // const prompt = `Summarize the content: ${contentInJson.content}`;
+    const chessPrompt = `I am playing as White in this chess game. Current board state (FEN): ${fenString}.
+    Move history (PGN): ${contentInJson.content}
 
-    const chessPrompt = `I am playing as White in this chess game. The moves made so far are in PGN format: ${contentInJson.content}
+Each numbered entry represents a turn:
+- The **first move** (e.g., "e4") is mine (White),
+- The **second move** (e.g., "e5") is my opponent's (Black).
 
-                        Each numbered entry represents a turn:
-                        - The **first move** (e.g., "e4") is mine (White),
-                        - The **second move** (e.g., "e5") is my opponent's (Black).
-                        
-                        If there are no moves yet, suggest a strong opening move for White.
-                        
-                        Your response must follow these rules:
-                        1. Do NOT use chess abbreviations like K, Q, N, etc. State the piece
-                        2. Use only square names like "e4", "g5", etc.
-                        3. Say clearly which of **my pieces (White)** to move, and to where.
-                        4. ONLY suggest a move for me — not for my opponent.
-                        5. Respond in this format:
-                           - "Move your [piece] from [square] to [square]."
-                        
-                        Examples:
-                        - "Move your pawn from e2 to e4."
-                        - "Move your bishop to g5."
-                        - "Move your rook from a1 to d1."
-                        
-                        Keep it concise and do not describe my opponent's pieces.`;
+If there are no moves yet, suggest a strong opening move for White.
+
+Your response must follow these rules:
+1. Do NOT use chess abbreviations like K, Q, N, etc. State the piece
+2. Use only square names like "e4", "g5", etc.
+3. Say clearly which of **my pieces (White)** to move, and to where.
+4. ONLY suggest a move for me — not for my opponent.
+5. Respond in this format:
+   - "Move your [piece] from [square] to [square]."
+6. Verify the move is legal in the current position before suggesting it.
+
+Examples:
+- "Move your pawn from e2 to e4."
+- "Move your bishop to g5."
+- "Move your rook from a1 to d1."
+Keep it concise.`;
                         
     try{
         const response = await fetch(url, {
